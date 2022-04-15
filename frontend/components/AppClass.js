@@ -1,6 +1,18 @@
 import React from 'react'
+const url = 'http://localhost:9000/api/result';
 
 export default class AppClass extends React.Component {
+  state = {
+    x: 2,
+    y: 2,
+    moved: 0,
+    matrix: [
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0]],
+    email: '',
+    message: ''
+  };
   render() {
     const { className } = this.props
     return (
