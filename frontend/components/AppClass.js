@@ -127,7 +127,7 @@ export default class AppClass extends React.Component {
           })}
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message"> {this.state.message}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.left}>LEFT</button>
