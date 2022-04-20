@@ -1,22 +1,23 @@
 import React from 'react'
 const url = 'http://localhost:9000/api/result';
+import axios from 'axios';
 
 export default class AppClass extends React.Component {
   state = {
     x: 2,
     y: 2,
     steps: 0,
+    message:"",
     matrix: [
       [0, 0, 0],
       [0, 1, 0],
       [0, 0, 0]],
-    email: '',
-    message: ''
+    email:'',
   };
 
   left = () => {
     if(this.state.x ===1) {
-      this.setState({...this.state, message: `You can't go left`})
+      this.setState({ ...this.state, message:`You can't go left`})
     }
     else
     {
@@ -26,16 +27,16 @@ export default class AppClass extends React.Component {
       this.setState({
         ...this.state,
         steps: this.state.steps + 1,
+        message:"",
         x: this.state.x - 1,
         matrix: [...newMatrix],
-        message:'',
       })
     }
   }
 
   right = () => {
     if(this.state.x ===3) {
-      this.setState({...this.state, message: `You can't go right`})
+      this.setState({ ...this.state, message:`You can't go right`})
     }
     else
     {
@@ -46,8 +47,8 @@ export default class AppClass extends React.Component {
         ...this.state,
         steps: this.state.steps + 1,
         x: this.state.x + 1,
+        message:"",
         matrix: [...newMatrix],
-        message:'',
       })
     }
   }
@@ -65,8 +66,8 @@ export default class AppClass extends React.Component {
         ...this.state,
         steps: this.state.steps + 1, 
         y: this.state.y - 1, 
-        matrix:[...newMatrix],
-        message:'',  
+        message:"", 
+        matrix:[...newMatrix], 
       })      
     };    
   }
@@ -84,8 +85,8 @@ export default class AppClass extends React.Component {
         ...this.state,
         steps: this.state.steps + 1, 
         y: this.state.y + 1, 
-        matrix:[...newMatrix],
-        message:'',  
+        message:"", 
+        matrix:[...newMatrix], 
       })      
     }    
   }
@@ -96,24 +97,50 @@ export default class AppClass extends React.Component {
         steps: 0, 
         y: 2, 
         x: 2,
+        message:"",
         matrix: [
           [0, 0, 0],
           [0, 1, 0],
           [0, 0, 0]],
-        email: '',
-        message: '' 
+        email:'', 
       })      
     }    
 
+    changeInput = (evt) => {
+      const {value} = evt.target;
+      this.setState({
+        ...this.state,
+        email: value,
+      });
+    };
+
+    onSubmit = (evt)=>  {
+      evt.preventDefault()
+      axios.post(
+        url,
+        {...this.state, email: this.state.email})
+      .then(
+        (res)=>{this.setState({
+          ...this.state, message: res.data.message
+        })})
+      .catch((error)=>
+      {this.setState({
+          ...this.state, 
+          message:error.response.data.message
+        })}
+      )
+      this.setState({ ...this.state, email:''});
+    }
+
   render() {
-    const { x, y, matrix, steps,  message, email } = this.state;
+    const { x, y, matrix, steps, message, email } = this.state;
     const { className } = this.props;
 
     return (
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates ({this.state.x}, {this.state.y})</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">You moved {this.state.steps} {this.state.steps === 1 ? 'time' : 'times'}</h3>
         </div>
         <div id="grid">
           {this.state.matrix.flatMap((x) => x)
@@ -127,7 +154,7 @@ export default class AppClass extends React.Component {
           })}
         </div>
         <div className="info">
-          <h3 id="message"> {this.state.message}</h3>
+          <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.left}>LEFT</button>
@@ -136,8 +163,12 @@ export default class AppClass extends React.Component {
           <button id="down" onClick={this.down}>DOWN</button>
           <button id="reset" onClick={this.reset}>reset</button>
         </div>
-        <form>
-          <input id="email" type="email" placeholder="type email"></input>
+          <form onSubmit = {this.onSubmit}>
+          <input onChange = {this.changeInput}
+            value = {email}
+            id= 'email'
+            type= 'email'
+            placeholder= 'type email'></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
