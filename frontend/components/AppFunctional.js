@@ -70,7 +70,7 @@ export default function AppFunctional(props) {
             message:"", 
             matrix:[...newMatrix], 
           })      
-        };    
+        }    
       }
     
       const down  = () => {
@@ -94,7 +94,6 @@ export default function AppFunctional(props) {
     
       const reset  = () => {
           setState({
-            ...state,
             steps: 0, 
             y: 2, 
             x: 2,
@@ -146,13 +145,14 @@ export default function AppFunctional(props) {
             <div id="grid">
               {state.matrix.flatMap((x) => x)
               .map((spot, idx) => {
-                return (
-                  <div key = {idx}
-                  className={`square${spot ? ' active' : '' }`}>
-                  {spot ? 'B' : ''}
+                return spot === 1 ? (
+                  <div key = {idx} value = {idx} className= 'square active'>
+                  B
                   </div>
-                );
-              })}
+                ) : (
+                  <div key={idx} value={idx} className='square'></div>
+              );
+                })}  
             </div>
             <div className="info">
               <h3 id="message">{state.message}</h3>
@@ -165,8 +165,8 @@ export default function AppFunctional(props) {
         <button onClick={reset}id="reset">reset</button>
           </div>
               <form onSubmit = {onSubmit}>
-              <input onChange = {changeInput}
-                value = {email}
+                <input onChange = {changeInput}
+                value = {state.email}
                 id= 'email'
                 type= 'email'
                 placeholder= 'type email'></input>

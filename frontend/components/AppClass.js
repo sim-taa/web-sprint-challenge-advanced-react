@@ -93,7 +93,6 @@ export default class AppClass extends React.Component {
 
   reset  = () => {
       this.setState({
-        ...this.state,
         steps: 0, 
         y: 2, 
         x: 2,
