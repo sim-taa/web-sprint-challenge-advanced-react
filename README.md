@@ -1,4 +1,4 @@
-# Sprint Challenge: Advanced React
+# Advanced React
 
 ## Intro
 
